@@ -1,4 +1,4 @@
-import splitfolders, sys, os
+import splitfolders, sys
 
 input = sys.argv[1]
 output = sys.argv[2]
