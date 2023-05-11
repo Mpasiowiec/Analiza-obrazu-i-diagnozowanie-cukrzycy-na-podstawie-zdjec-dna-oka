@@ -12,8 +12,8 @@ rat = (.7, .2, .1)
 scale = 300
 
 if len(sys.argv) == 2 or sys.argv[2] == 'class':    
-    splitfolders.ratio('./ARIA\\raw', output="./"+output+"/raw_data", seed=1337, ratio=rat)
-    for f in glob.glob("./"+output+"/raw_data/train/control/*.tif")+glob.glob("./"+output+"/raw_data/test/control/*.tif")+glob.glob("./"+output+"/raw_data/val/control/*.tif")+glob.glob("./"+output+"/raw_data/train/diabetic/*.tif")+glob.glob("./"+output+"/raw_data/test/diabetic/*.tif")+glob.glob("./"+output+"/raw_data/val/diabetic/*.tif"):
+    splitfolders.ratio('./ARIA\\raw', output="./"+output+"/data_raw", seed=1337, ratio=rat)
+    for f in glob.glob("./"+output+"/data_raw/train/control/*.tif")+glob.glob("./"+output+"/data_raw/test/control/*.tif")+glob.glob("./"+output+"/data_raw/val/control/*.tif")+glob.glob("./"+output+"/data_raw/train/diabetic/*.tif")+glob.glob("./"+output+"/data_raw/test/diabetic/*.tif")+glob.glob("./"+output+"/data_raw/val/diabetic/*.tif"):
         a=cv2.imread(f)
         a=scaleRadius(a,scale)
         a=cv2.addWeighted(a,                                   4,
@@ -25,24 +25,27 @@ if len(sys.argv) == 2 or sys.argv[2] == 'class':
         a=a*b+128*(1-b)
         os.makedirs(os.path.join(f[:3+len(output)]+f[7+len(output):]).split('\\')[0],exist_ok = True)
         cv2.imwrite(os.path.join(f[:3+len(output)]+f[7+len(output):-4]+'.png'),a)
+        
+    splitfolders.ratio('./ARIA\\vessel', output="./"+output+"/data_vessel", seed=1337, ratio=rat)    
+    
 
 
 elif sys.argv[2] == 'segm':
     if os.path.exists("./ARIA/segm") == 0:
-        os.makedirs("./ARIA/segm/raw_img",exist_ok = True)
+        os.makedirs("./ARIA/segm/img_raw",exist_ok = True)
     
         for f in glob.glob('./ARIA/raw/control/*.tif')+glob.glob('./ARIA/raw/diabetic/*.tif'):
-            shutil.copyfile(f, "./ARIA/segm/raw_img/"+f.split('\\')[-1])
+            shutil.copyfile(f, "./ARIA/segm/img_raw/"+f.split('\\')[-1])
                 
     splitfolders.ratio('./ARIA/segm', output="./"+output+"/data", seed=42, ratio=rat, group_prefix=True)
     
     shutil.rmtree('./ARIA/segm')
     
     for i in ['train', 'val', 'test']:
-        for j in ['img', 'mask', 'raw_mask', 'segm_BDP', 'segm_BSS']:
+        for j in ['img', 'mask', 'mask_raw', 'segm_BDP', 'segm_BSS']:
             os.makedirs("./"+output+f"/data/{i}/{j}/",exist_ok = True)
     
-    for f in glob.glob("./"+output+"/data/train/raw_img/*.tif")+glob.glob("./"+output+"/data/test/raw_img/*.tif")+glob.glob("./"+output+"/data/val/raw_img/*.tif"):
+    for f in glob.glob("./"+output+"/data/train/img_raw/*.tif")+glob.glob("./"+output+"/data/test/img_raw/*.tif")+glob.glob("./"+output+"/data/val/img_raw/*.tif"):
         a=cv2.imread(f)
         bb=numpy.zeros(a.shape)
         cv2.circle(bb,(int(a.shape[1]/2), int(a.shape[0]/2)),
@@ -57,7 +60,7 @@ elif sys.argv[2] == 'segm':
         a=a*b+128*(1-b)
         cv2.imwrite(os.path.join(f.split('\\')[0][:-7]+'img/'+f.split('\\')[1][:-4]+'.png'),a)
         cv2.imwrite(os.path.join(f.split('\\')[0][:-7]+'mask/'+f.split('\\')[1][:-4]+'.png'),b * 255)
-        cv2.imwrite(os.path.join(f.split('\\')[0][:-7]+'raw_mask/'+f.split('\\')[1][:-4]+'.png'),bb * 255)
+        cv2.imwrite(os.path.join(f.split('\\')[0][:-7]+'mask_raw/'+f.split('\\')[1][:-4]+'.png'),bb * 255)
         
         for p in glob.glob(f"./ARIA/vessel/control/*.tif")+glob.glob(f"./ARIA/vessel/diabetic/*.tif"):
             if p.split('\\')[-1].split('.')[0][:-4] == f.split('\\')[1][:-4]:
