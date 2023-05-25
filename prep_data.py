@@ -12,8 +12,8 @@ rat = (.7, .2, .1)
 scale = 300
 
 if len(sys.argv) == 2 or sys.argv[2] == 'class':    
-    splitfolders.ratio('./ARIA\\raw', output="./"+output+"/data_raw", seed=1337, ratio=rat)
-    for f in glob.glob("./"+output+"/data_raw/train/control/*.tif")+glob.glob("./"+output+"/data_raw/test/control/*.tif")+glob.glob("./"+output+"/data_raw/val/control/*.tif")+glob.glob("./"+output+"/data_raw/train/diabetic/*.tif")+glob.glob("./"+output+"/data_raw/test/diabetic/*.tif")+glob.glob("./"+output+"/data_raw/val/diabetic/*.tif"):
+    splitfolders.ratio('./data/ARIA\\raw', output="./"+output+"/data/data_A_raw", seed=1337, ratio=rat)
+    for f in glob.glob("./"+output+"/data/data_A_raw/train/control/*.tif")+glob.glob("./"+output+"/data/data_A_raw/test/control/*.tif")+glob.glob("./"+output+"/data/data_A_raw/val/control/*.tif")+glob.glob("./"+output+"/data/data_A_raw/train/diabetic/*.tif")+glob.glob("./"+output+"/data/data_A_raw/test/diabetic/*.tif")+glob.glob("./"+output+"/data/data_A_raw/val/diabetic/*.tif"):
         a=cv2.imread(f)
         a=scaleRadius(a,scale)
         a=cv2.addWeighted(a,                                   4,
@@ -23,15 +23,38 @@ if len(sys.argv) == 2 or sys.argv[2] == 'class':
         cv2.circle(b,(int(a.shape[1]/2), int(a.shape[0]/2)),
                    int(scale*0.93), (1,1,1),-1,8,0)
         a=a*b+128*(1-b)
-        os.makedirs(os.path.join(f[:3+len(output)]+f[7+len(output):]).split('\\')[0],exist_ok = True)
-        cv2.imwrite(os.path.join(f[:3+len(output)]+f[7+len(output):-4]+'.png'),a)
+        os.makedirs(os.path.join(f[:14+len(output)]+f[18+len(output):]).split('\\')[0],exist_ok = True)
+        cv2.imwrite(os.path.join(f[:14+len(output)]+f[18+len(output):-4]+'.png'),a)
+
+    splitfolders.ratio('./data/ARIA\\vessel', output="./"+output+"/data/data_A_vessel", seed=1337, ratio=rat)
+       
+    splitfolders.ratio('./data/HRF\\raw', output="./"+output+"/data/data_H_raw", seed=1337, ratio=rat)
+    for f in glob.glob("./"+output+"/data/data_H_raw/train/control/*.jpg")+glob.glob("./"+output+"/data/data_H_raw/test/control/*.jpg")+glob.glob("./"+output+"/data/data_H_raw/val/control/*.jpg")+glob.glob("./"+output+"/data/data_H_raw/train/diabetic/*.jpg")+glob.glob("./"+output+"/data/data_H_raw/test/diabetic/*.jpg")+glob.glob("./"+output+"/data/data_H_raw/val/diabetic/*.jpg"):
+        a=cv2.imread(f)
+        a=scaleRadius(a,scale)
+        a=cv2.addWeighted(a,                                   4,
+                          cv2.GaussianBlur(a,(0,0), scale/30),-4,
+                          128)
+        b=numpy.zeros(a.shape)
+        cv2.circle(b,(int(a.shape[1]/2), int(a.shape[0]/2)),
+                   int(scale*0.93), (1,1,1),-1,8,0)
+        a=a*b+128*(1-b)
+        os.makedirs(os.path.join(f[:14+len(output)]+f[18+len(output):]).split('\\')[0],exist_ok = True)
+        cv2.imwrite(os.path.join(f[:14+len(output)]+f[18+len(output):-4]+'.png'),a)
         
-    splitfolders.ratio('./ARIA\\vessel', output="./"+output+"/data_vessel", seed=1337, ratio=rat)    
+    splitfolders.ratio('./data/HRF\\vessel', output="./"+output+"/data/data_H_vessel", seed=1337, ratio=rat)
+    
+    shutil.copytree("./"+output+"/data/data_A", "./"+output+"/data/data_m", dirs_exist_ok=True)
+    shutil.copytree("./"+output+"/data/data_H", "./"+output+"/data/data_m", dirs_exist_ok=True)
+    shutil.copytree("./"+output+"/data/data_A_raw", "./"+output+"/data/data_m_raw", dirs_exist_ok=True)
+    shutil.copytree("./"+output+"/data/data_H_raw", "./"+output+"/data/data_m_raw", dirs_exist_ok=True)
+    shutil.copytree("./"+output+"/data/data_A_vessel", "./"+output+"/data/data_m_vessel", dirs_exist_ok=True)
+    shutil.copytree("./"+output+"/data/data_H_vessel", "./"+output+"/data/data_m_vessel", dirs_exist_ok=True)
     
 
 
 elif sys.argv[2] == 'segm':
-    if os.path.exists("./ARIA/segm") == 0:
+    if os.path.exists("./ARIA/segm") == False:
         os.makedirs("./ARIA/segm/img_raw",exist_ok = True)
     
         for f in glob.glob('./ARIA/raw/control/*.tif')+glob.glob('./ARIA/raw/diabetic/*.tif'):
