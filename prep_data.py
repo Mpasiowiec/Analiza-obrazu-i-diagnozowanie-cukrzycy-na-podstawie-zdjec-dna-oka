@@ -9,66 +9,138 @@ def scaleRadius(img, scale):
 
 output = sys.argv[1]
 rat = (.7, .2, .1)
-scale = 300
+scale = 500
 
 if len(sys.argv) == 2 or sys.argv[2] == 'class':    
-    splitfolders.ratio('./data/ARIA\\raw', output="./"+output+"/data/data_A_raw", seed=1337, ratio=rat)
-    for f in glob.glob("./"+output+"/data/data_A_raw/train/control/*.tif")+glob.glob("./"+output+"/data/data_A_raw/test/control/*.tif")+glob.glob("./"+output+"/data/data_A_raw/val/control/*.tif")+glob.glob("./"+output+"/data/data_A_raw/train/diabetic/*.tif")+glob.glob("./"+output+"/data/data_A_raw/test/diabetic/*.tif")+glob.glob("./"+output+"/data/data_A_raw/val/diabetic/*.tif"):
-        a=cv2.imread(f)
-        a=scaleRadius(a,scale)
-        a=cv2.addWeighted(a,                                   4,
-                          cv2.GaussianBlur(a,(0,0), scale/30),-4,
-                          128)
-        b=numpy.zeros(a.shape)
-        cv2.circle(b,(int(a.shape[1]/2), int(a.shape[0]/2)),
-                   int(scale*0.93), (1,1,1),-1,8,0)
-        a=a*b+128*(1-b)
-        os.makedirs(os.path.join(f[:14+len(output)]+f[18+len(output):]).split('\\')[0],exist_ok = True)
-        cv2.imwrite(os.path.join(f[:14+len(output)]+f[18+len(output):-4]+'.png'),a)
 
-    splitfolders.ratio('./data/ARIA\\vessel', output="./"+output+"/data/data_A_vessel", seed=1337, ratio=rat)
-       
-    splitfolders.ratio('./data/HRF\\raw', output="./"+output+"/data/data_H_raw", seed=1337, ratio=rat)
-    for f in glob.glob("./"+output+"/data/data_H_raw/train/control/*.jpg")+glob.glob("./"+output+"/data/data_H_raw/test/control/*.jpg")+glob.glob("./"+output+"/data/data_H_raw/val/control/*.jpg")+glob.glob("./"+output+"/data/data_H_raw/train/diabetic/*.jpg")+glob.glob("./"+output+"/data/data_H_raw/test/diabetic/*.jpg")+glob.glob("./"+output+"/data/data_H_raw/val/diabetic/*.jpg"):
-        a=cv2.imread(f)
-        a=scaleRadius(a,scale)
-        a=cv2.addWeighted(a,                                   4,
-                          cv2.GaussianBlur(a,(0,0), scale/30),-4,
-                          128)
-        b=numpy.zeros(a.shape)
-        cv2.circle(b,(int(a.shape[1]/2), int(a.shape[0]/2)),
-                   int(scale*0.93), (1,1,1),-1,8,0)
-        a=a*b+128*(1-b)
-        os.makedirs(os.path.join(f[:14+len(output)]+f[18+len(output):]).split('\\')[0],exist_ok = True)
-        cv2.imwrite(os.path.join(f[:14+len(output)]+f[18+len(output):-4]+'.png'),a)
-        
-    splitfolders.ratio('./data/HRF\\vessel', output="./"+output+"/data/data_H_vessel", seed=1337, ratio=rat)
+    os.makedirs("./data/segm/A_vessel/control",exist_ok = True)
+    os.makedirs("./data/segm/A_vessel/retina",exist_ok = True)
+    os.makedirs("./data/segm/F_vessel/control",exist_ok = True)
+    os.makedirs("./data/segm/F_vessel/retina",exist_ok = True)
+    os.makedirs("./data/segm/H_vessel/control",exist_ok = True)
+    os.makedirs("./data/segm/H_vessel/retina",exist_ok = True)
     
-    shutil.copytree("./"+output+"/data/data_A", "./"+output+"/data/data_m", dirs_exist_ok=True)
-    shutil.copytree("./"+output+"/data/data_H", "./"+output+"/data/data_m", dirs_exist_ok=True)
-    shutil.copytree("./"+output+"/data/data_A_raw", "./"+output+"/data/data_m_raw", dirs_exist_ok=True)
-    shutil.copytree("./"+output+"/data/data_H_raw", "./"+output+"/data/data_m_raw", dirs_exist_ok=True)
-    shutil.copytree("./"+output+"/data/data_A_vessel", "./"+output+"/data/data_m_vessel", dirs_exist_ok=True)
-    shutil.copytree("./"+output+"/data/data_H_vessel", "./"+output+"/data/data_m_vessel", dirs_exist_ok=True)
+    for f in glob.glob('./data/ARIA/aria_c_markup_vessel/*.tif'):
+        shutil.copyfile(f, "./data/segm/A_vessel/control/"+f.split('\\')[-1])
+
+    for f in glob.glob('./data/ARIA/aria_d_markup_vessel/*.tif'):
+        shutil.copyfile(f, "./data/segm/A_vessel/retina/"+f.split('\\')[-1])
+
+    for f in glob.glob('./data/FIVES/test/Ground truth/*.png')+glob.glob('./data/FIVES/train/Ground truth/*.png'):
+        leb = f.split('\\')[-1].split('.')[0].split('_')[-1]
+        if leb == 'N':
+            shutil.copyfile(f, "./data/segm/F_vessel/control/"+f.split('\\')[-1])
+        elif leb == 'D':
+            shutil.copyfile(f, "./data/segm/F_vessel/retina/"+f.split('\\')[-1])
+    
+    for f in glob.glob('./data/HRF/manual1/*.tif'):
+        leb = f.split('\\')[-1].split('.')[0].split('_')[-1]
+        if leb == 'h':
+            shutil.copyfile(f, "./data/segm/H_vessel/control/"+f.split('\\')[-1])
+        if leb == 'dr':
+            shutil.copyfile(f, "./data/segm/H_vessel/retina/"+f.split('\\')[-1])
+            
+    splitfolders.ratio('./data/segm/A_vessel', output="./"+output+"/data/data_m_vessel", seed=1337, ratio=rat)
+    splitfolders.ratio('./data/segm/F_vessel', output="./"+output+"/data/data_m_vessel", seed=1337, ratio=rat)
+    splitfolders.ratio('./data/segm/H_vessel', output="./"+output+"/data/data_m_vessel", seed=1337, ratio=rat)
+    
+    os.makedirs("./data/segm/A/control",exist_ok = True)
+    os.makedirs("./data/segm/A/retina",exist_ok = True)
+    os.makedirs("./data/segm/F/control",exist_ok = True)
+    os.makedirs("./data/segm/F/retina",exist_ok = True)
+    os.makedirs("./data/segm/H/control",exist_ok = True)
+    os.makedirs("./data/segm/H/retina",exist_ok = True)
+    
+    for f in glob.glob('./data/ARIA/aria_c_markups/*.tif'):
+        shutil.copyfile(f, "./data/segm/A/control/"+f.split('\\')[-1])
+
+    for f in glob.glob('./data/ARIA/aria_d_markups/*.tif'):
+        shutil.copyfile(f, "./data/segm/A/retina/"+f.split('\\')[-1])
+
+    for f in glob.glob('./data/FIVES/test/Original/*.png')+glob.glob('./data/FIVES/train/Original/*.png'):
+        leb = f.split('\\')[-1].split('.')[0].split('_')[-1]
+        if leb == 'N':
+            shutil.copyfile(f, "./data/segm/F/control/"+f.split('\\')[-1])
+        elif leb == 'D':
+            shutil.copyfile(f, "./data/segm/F/retina/"+f.split('\\')[-1])
+    
+    for f in glob.glob('./data/HRF/images/*.jpg'):
+        leb = f.split('\\')[-1].split('.')[0].split('_')[-1]
+        if leb == 'h':
+            shutil.copyfile(f, "./data/segm/H/control/"+f.split('\\')[-1])
+        if leb == 'dr':
+            shutil.copyfile(f, "./data/segm/H/retina/"+f.split('\\')[-1])
+            
+    splitfolders.ratio('./data/segm/A', output="./"+output+"/data/data_m", seed=1337, ratio=rat)
+    splitfolders.ratio('./data/segm/F', output="./"+output+"/data/data_m", seed=1337, ratio=rat)
+    splitfolders.ratio('./data/segm/H', output="./"+output+"/data/data_m", seed=1337, ratio=rat)
+
+    for i in ["test", "train", "val"]:
+        for f in glob.glob("./"+output+"/data/data_m/" + i + "/control/*")+glob.glob("./"+output+"/data/data_m/" + i + "/retina/*"):
+            a=cv2.imread(f)
+            a=scaleRadius(a,scale)
+            a=cv2.addWeighted(a,                                   4,
+                              cv2.GaussianBlur(a,(0,0), scale/30),-4,
+                              128)
+            b=numpy.zeros(a.shape)
+            cv2.circle(b,(int(a.shape[1]/2), int(a.shape[0]/2)),
+                       int(scale*1.15), (1,1,1),-1,8,0)
+            a=a*b+128*(1-b)
+            os.makedirs(os.path.join(f[:14+len(output)]+"_prep", f.split('/')[4], f.split('/')[5].split('\\')[0]),exist_ok = True)
+            cv2.imwrite(os.path.join(f[:14+len(output)]+"_prep", f.split('/')[4], f.split('/')[5][:-4]+'.png'),a)
+    
+    shutil.rmtree("./data/segm")
     
 
 
 elif sys.argv[2] == 'segm':
-    if os.path.exists("./ARIA/segm") == False:
-        os.makedirs("./ARIA/segm/img_raw",exist_ok = True)
     
-        for f in glob.glob('./ARIA/raw/control/*.tif')+glob.glob('./ARIA/raw/diabetic/*.tif'):
-            shutil.copyfile(f, "./ARIA/segm/img_raw/"+f.split('\\')[-1])
-                
-    splitfolders.ratio('./ARIA/segm', output="./"+output+"/data", seed=42, ratio=rat, group_prefix=True)
+    os.makedirs("./data/segm/img",exist_ok = True)
+         
+    for i in glob.glob('./data/ARIA/*'):
+        if i.split('\\')[-1].split('_')[-1] == 'markups':
+            for f in glob.glob(i+'/*'):
+                shutil.copyfile(f, "./data/segm/img/"+f.split('\\')[-1])
+ 
+    nr=1
+    for f in glob.glob('./data/FIVES/test/Original/*.png')+glob.glob('./data/FIVES/train/Original/*.png'):
+        shutil.copyfile(f, "./data/segm/img/"+"f_"+str(nr)+"_"+f.split('\\')[-1].split('_')[-1])
+        nr+=1
     
-    shutil.rmtree('./ARIA/segm')
+    for f in glob.glob('./data/HRF/images/*.jpg'):
+        shutil.copyfile(f, "./data/segm/img/"+f.split('\\')[-1])
+  
+    splitfolders.ratio('./data/segm', output="./"+output+"/data", seed=42, ratio=rat, group_prefix=True)
+    shutil.rmtree('./data/segm')
     
     for i in ['train', 'val', 'test']:
-        for j in ['img', 'mask', 'mask_raw', 'segm_BDP', 'segm_BSS']:
+        for j in ['img_prep', 'mask_prep', 'mask', 'segm']:
             os.makedirs("./"+output+f"/data/{i}/{j}/",exist_ok = True)
     
-    for f in glob.glob("./"+output+"/data/train/img_raw/*.tif")+glob.glob("./"+output+"/data/test/img_raw/*.tif")+glob.glob("./"+output+"/data/val/img_raw/*.tif"):
+    for f in glob.glob("./"+output+"/data/train/img/*")+glob.glob("./"+output+"/data/test/img/*")+glob.glob("./"+output+"/data/val/img/*"):
+        
+        for p in glob.glob(f"./data/ARIA/aria_a_markup_vessel/*.tif")+glob.glob(f"./data/ARIA/aria_d_markup_vessel/*.tif")+glob.glob(f"./data/ARIA/aria_c_markup_vessel/*.tif")+glob.glob("./data/HRF/manual1/*.tif"):
+            if p.split('\\')[-1].split('.')[0][:-4] == f.split('\\')[-1][:-4]:
+                if p.split('\\')[-1].split('.')[0].split('_')[-1] == 'BDP':
+                    shutil.copyfile(p, f.split('\\')[0][:-3]+'segm/'+p.split('\\')[1])
+                if p.split('\\')[-1].split('.')[0].split('_')[-1] == 'BSS':
+                    shutil.copyfile(p, f.split('\\')[0][:-3]+'segm/'+p.split('\\')[1])
+                    shutil.copyfile(f, f.split('\\')[0]+'\\'+p.split('\\')[1])
+            elif p.split('\\')[-1].split('.')[0] == f.split('\\')[-1].split('.')[0]:
+                shutil.copyfile(p, f.split('\\')[0][:-3]+'segm/'+p.split('\\')[1])
+
+    
+    for d in glob.glob("./"+output+"/data/train/img/*.png")+glob.glob("./"+output+"/data/test/img/*.png")+glob.glob("./"+output+"/data/val/img/*.png"):
+        nr=1
+        for f in glob.glob('./data/FIVES/test/Original/*.png')+glob.glob('./data/FIVES/train/Original/*.png'):
+            if d.split('\\')[-1] == "f_"+str(nr)+"_"+f.split('\\')[-1].split('_')[-1]:
+                for p in glob.glob('./data/FIVES/test/Ground truth/*.png')+glob.glob('./data/FIVES/train/Ground truth/*.png'):
+                    if p.split('\\')[-1] == f.split('\\')[-1]:
+                        shutil.copyfile(p, d.split('\\')[0][:-3]+'segm/'+"f_"+str(nr)+"_"+f.split('\\')[-1].split('_')[-1])
+            nr+=1
+                    
+    for f in glob.glob("./"+output+"/data/train/img/*")+glob.glob("./"+output+"/data/test/img/*")+glob.glob("./"+output+"/data/val/img/*"):
+                                    
         a=cv2.imread(f)
         bb=numpy.zeros(a.shape)
         cv2.circle(bb,(int(a.shape[1]/2), int(a.shape[0]/2)),
@@ -79,19 +151,11 @@ elif sys.argv[2] == 'segm':
                           128)
         b=numpy.zeros(a.shape)
         cv2.circle(b,(int(a.shape[1]/2), int(a.shape[0]/2)),
-                   int(scale*0.93), (1,1,1),-1,8,0)
+                   int(scale*1.15), (1,1,1),-1,8,0)
         a=a*b+128*(1-b)
-        cv2.imwrite(os.path.join(f.split('\\')[0][:-7]+'img/'+f.split('\\')[1][:-4]+'.png'),a)
-        cv2.imwrite(os.path.join(f.split('\\')[0][:-7]+'mask/'+f.split('\\')[1][:-4]+'.png'),b * 255)
-        cv2.imwrite(os.path.join(f.split('\\')[0][:-7]+'mask_raw/'+f.split('\\')[1][:-4]+'.png'),bb * 255)
         
-        for p in glob.glob(f"./ARIA/vessel/control/*.tif")+glob.glob(f"./ARIA/vessel/diabetic/*.tif"):
-            if p.split('\\')[-1].split('.')[0][:-4] == f.split('\\')[1][:-4]:
-                if p.split('\\')[-1].split('.')[0].split('_')[-1] == 'BDP': 
-                    shutil.copyfile(p, f.split('\\')[0][:-7]+'segm_BDP/'+p.split('\\')[1])
-                if p.split('\\')[-1].split('.')[0].split('_')[-1] == 'BSS':
-                    shutil.copyfile(p, f.split('\\')[0][:-7]+'segm_BSS/'+p.split('\\')[1])
-        
-        
+        cv2.imwrite(os.path.join(f.split("\\")[0][:-3]+'img_prep/'+f.split('\\')[1][:-4]+'.png'),a)
+        cv2.imwrite(os.path.join(f.split("\\")[0][:-3]+'mask_prep/'+f.split('\\')[1][:-4]+'.png'),b * 255)
+        cv2.imwrite(os.path.join(f.split("\\")[0][:-3]+'mask/'+f.split('\\')[1][:-4]+'.png'),bb * 255)
         
 
