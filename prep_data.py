@@ -102,10 +102,10 @@ elif sys.argv[2] == 'segm':
             for f in glob.glob(i+'/*'):
                 shutil.copyfile(f, "./data/segm/img/"+f.split('\\')[-1])
  
-    nr=1
+    # nr=1
     for f in glob.glob('./data/FIVES/test/Original/*.png')+glob.glob('./data/FIVES/train/Original/*.png'):
-        shutil.copyfile(f, "./data/segm/img/"+"f_"+str(nr)+"_"+f.split('\\')[-1].split('_')[-1])
-        nr+=1
+        shutil.copyfile(f, "./data/segm/img/"+"f_"+f.split('\\')[-1])
+        # nr+=1
     
     for f in glob.glob('./data/HRF/images/*.jpg'):
         shutil.copyfile(f, "./data/segm/img/"+f.split('\\')[-1])
@@ -122,7 +122,7 @@ elif sys.argv[2] == 'segm':
         for p in glob.glob(f"./data/ARIA/aria_a_markup_vessel/*.tif")+glob.glob(f"./data/ARIA/aria_d_markup_vessel/*.tif")+glob.glob(f"./data/ARIA/aria_c_markup_vessel/*.tif")+glob.glob("./data/HRF/manual1/*.tif"):
             if p.split('\\')[-1].split('.')[0][:-4] == f.split('\\')[-1][:-4]:
                 if p.split('\\')[-1].split('.')[0].split('_')[-1] == 'BDP':
-                    shutil.copyfile(p, f.split('\\')[0][:-3]+'segm/'+p.split('\\')[1])
+                    shutil.copyfile(p, f.split('\\')[0][:-3]+'segm/'+p.split('\\')[1].replace('_BDP', ''))
                 if p.split('\\')[-1].split('.')[0].split('_')[-1] == 'BSS':
                     shutil.copyfile(p, f.split('\\')[0][:-3]+'segm/'+p.split('\\')[1])
                     shutil.copyfile(f, f.split('\\')[0]+'\\'+p.split('\\')[1])
@@ -131,13 +131,11 @@ elif sys.argv[2] == 'segm':
 
     
     for d in glob.glob("./"+output+"/data/train/img/*.png")+glob.glob("./"+output+"/data/test/img/*.png")+glob.glob("./"+output+"/data/val/img/*.png"):
-        nr=1
         for f in glob.glob('./data/FIVES/test/Original/*.png')+glob.glob('./data/FIVES/train/Original/*.png'):
-            if d.split('\\')[-1] == "f_"+str(nr)+"_"+f.split('\\')[-1].split('_')[-1]:
+            if d.split('\\')[-1] == "f_"+f.split('\\')[-1]:
                 for p in glob.glob('./data/FIVES/test/Ground truth/*.png')+glob.glob('./data/FIVES/train/Ground truth/*.png'):
                     if p.split('\\')[-1] == f.split('\\')[-1]:
-                        shutil.copyfile(p, d.split('\\')[0][:-3]+'segm/'+"f_"+str(nr)+"_"+f.split('\\')[-1].split('_')[-1])
-            nr+=1
+                        shutil.copyfile(p, d.split('\\')[0][:-3]+'segm/'+"f_"+f.split('\\')[-1])
                     
     for f in glob.glob("./"+output+"/data/train/img/*")+glob.glob("./"+output+"/data/test/img/*")+glob.glob("./"+output+"/data/val/img/*"):
                                     
