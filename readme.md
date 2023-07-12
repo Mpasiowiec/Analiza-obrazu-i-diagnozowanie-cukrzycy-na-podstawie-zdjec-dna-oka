@@ -16,7 +16,7 @@ SUMMARY
 | Segmentation based on procesd image  without augmentation | 0.195 | 0.678 | 0.802 | 0.971 | 0.785 | 0.825 | 0.986|
 | Segmentation based on procesd image with augmentation | 0.200 | 0.670 | 0.797 |0.971 | 0.772 | 0.829 | 0.986|
 
-#PLOTS
+# PLOTS
 ## Clasification based on raw image
 ![alt text](https://github.com/Mpasiowiec/Retinopatia/blob/main/densenet/models/densenet121_e20_s300_b14_loss_plot.jpg?raw=true)
 ## Clasification based on procesd image
