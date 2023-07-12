@@ -1,9 +1,9 @@
 # CLASIFICATION TEST STATS
 | Model |  Loss | F1 score | Accuracy | Recall | Precision |
 | --- |  --- | --- | --- | --- | --- |
-| Clasification based on raw image  | 0.437 | 0.821 | 0.786 | 0.886 | 0.808 |
-| Clasification based on procesd image  | 0.264 | 0.909 | 0.914 | 0.881 | 0.943 |
-| Clasification based on  binary vessel map | 0.402 | 0.831 | 0.843 | 0.813 | 0.868 |
+| Clasification based on raw image  | 0.315 | 0.884 | 0.886 | 0.860 | 0.927 |
+| Clasification based on procesd image  | 0.228 | 0.949 | 0.957 | 0.910 | 0.999 |
+| Clasification based on  binary vessel map | 0.367 | 0.844 | 0.843 | 0.880 | 0.813 |
 
 
 # SEGMENTATION TEST STATS
@@ -17,10 +17,13 @@
 # PLOTS
 ## Clasification based on raw image
 ![alt text](https://github.com/Mpasiowiec/Retinopatia/blob/main/densenet/models/densenet121_e20_s300_b14_plot.jpg?raw=true)
+![alt text](https://github.com/Mpasiowiec/Retinopatia/blob/main/densenet/models/densenet121_e20_s300_b14_viz.jpg?raw=true)
 ## Clasification based on procesd image
 ![alt text](https://github.com/Mpasiowiec/Retinopatia/blob/main/densenet/models/densenet121_prep_e20_s300_b14_plot.jpg?raw=true)
+![alt text](https://github.com/Mpasiowiec/Retinopatia/blob/main/densenet/models/densenet121_prep_e20_s300_b14_viz.jpg?raw=true)
 ## Clasification based on  binary vessel map
 ![alt text](https://github.com/Mpasiowiec/Retinopatia/blob/main/densenet/models/densenet121_vessel_e20_s300_b14_plot.jpg?raw=true)
+![alt text](https://github.com/Mpasiowiec/Retinopatia/blob/main/densenet/models/densenet121_vessel_e20_s300_b14_viz.jpg?raw=true)
 
 ## Segmentation based on raw image
 ### without augmentation
