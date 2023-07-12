@@ -1,5 +1,3 @@
-SUMMARY
-=========
 # CLASIFICATION TEST STATS
 | Model |  Loss | F1 score | Accuracy | Recall | Precision |
 | --- |  --- | --- | --- | --- | --- |
