@@ -1,9 +1,9 @@
 # CLASIFICATION TEST STATS
 | Model |  Loss | F1 score | Accuracy | Recall | Precision |
 | --- |  --- | --- | --- | --- | --- |
-| Clasification based on raw image  | 0.315 | 0.884 | 0.886 | 0.860 | 0.927 |
-| Clasification based on procesd image  | 0.228 | 0.949 | 0.957 | 0.910 | 0.999 |
-| Clasification based on  binary vessel map | 0.367 | 0.844 | 0.843 | 0.880 | 0.813 |
+| Clasification based on raw image  | 0.267 | 0.895 | 0.914 | 0.866 | 0.946 |
+| Clasification based on procesd image  | 0.203 | 0.915 | 0.929 | 0.850 | 0.999 |
+| Clasification based on  binary vessel map | 0.419 | 0.843 | 0.829 | 0.866 | 0.829 |
 
 
 # SEGMENTATION TEST STATS
