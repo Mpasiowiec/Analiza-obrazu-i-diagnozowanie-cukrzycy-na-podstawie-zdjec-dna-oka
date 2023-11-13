@@ -27,16 +27,16 @@
 
 ## Segmentation based on raw image
 ### without augmentation
-![alt text](https://github.com/Mpasiowiec/Retinopatia/blob/main/unet/models/UNet11_e35_s256_b9_noaugm_plot.jpg?raw=true)
-![alt text](https://github.com/Mpasiowiec/Retinopatia/blob/main/unet/models/UNet11_e35_s256_b9_noaugm_viz.jpg?raw=true)
+![alt text](https://github.com/Mpasiowiec/Retinopatia/blob/main/unet/models/UNet11_e40_s256_b9_noaugm_plot.jpg?raw=true)
+![alt text](https://github.com/Mpasiowiec/Retinopatia/blob/main/unet/models/UNet11_e40_s256_b9_noaugm_viz.jpg?raw=true)
 ### with augmentation
-![alt text](https://github.com/Mpasiowiec/Retinopatia/blob/main/unet/models/UNet11_e35_s256_b9_jit_plot.jpg?raw=true)
-![alt text](https://github.com/Mpasiowiec/Retinopatia/blob/main/unet/models/UNet11_e35_s256_b9_jit_viz.jpg?raw=true)
+![alt text](https://github.com/Mpasiowiec/Retinopatia/blob/main/unet/models/UNet11_e40_s256_b9_jit_plot.jpg?raw=true)
+![alt text](https://github.com/Mpasiowiec/Retinopatia/blob/main/unet/models/UNet11_e40_s256_b9_jit_viz.jpg?raw=true)
 ## Segmentation based on procesd image
 ### without augmentation
-![alt text](https://github.com/Mpasiowiec/Retinopatia/blob/main/unet/models/UNet11_prep_e35_s256_b9_noaugm_plot.jpg?raw=true)
-![alt text](https://github.com/Mpasiowiec/Retinopatia/blob/main/unet/models/UNet11_prep_e35_s256_b9_noaugm_viz.jpg?raw=true)
+![alt text](https://github.com/Mpasiowiec/Retinopatia/blob/main/unet/models/UNet11_prep_e40_s256_b9_noaugm_plot.jpg?raw=true)
+![alt text](https://github.com/Mpasiowiec/Retinopatia/blob/main/unet/models/UNet11_prep_e40_s256_b9_noaugm_viz.jpg?raw=true)
 ### with augmentation
-![alt text](https://github.com/Mpasiowiec/Retinopatia/blob/main/unet/models/UNet11_prep_e35_s256_b9_jit_plot.jpg?raw=true)
-![alt text](https://github.com/Mpasiowiec/Retinopatia/blob/main/unet/models/UNet11_prep_e35_s256_b9_jit_viz.jpg?raw=true)
+![alt text](https://github.com/Mpasiowiec/Retinopatia/blob/main/unet/models/UNet11_prep_e40_s256_b9_jit_plot.jpg?raw=true)
+![alt text](https://github.com/Mpasiowiec/Retinopatia/blob/main/unet/models/UNet11_prep_e40_s256_b9_jit_viz.jpg?raw=true)
 
