@@ -108,6 +108,7 @@ The image below illustrates the visual differences between raw and processed fun
 Below is an example of data augmentation techniques used in the project:
 
 ![Data augmentation example](./img/augment.png)
+*A comparison of an image from the database and its sample transformations performed for data augmentation purposes. a) Original image. b) Image flipped horizontally with reduced brightness. c) Image with increased brightness and contrast. d) Image flipped both horizontally and vertically with reduced brightness.*
 
 # PLOTS
 ## Clasification based on raw image
